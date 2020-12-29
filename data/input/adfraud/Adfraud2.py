@@ -192,39 +192,37 @@ train_X,test_X,train_y,test_y=train_test_split(df_X,df_y,stratify=df_y,test_size
 train_X,val_X,train_y,val_y=train_test_split(train_X,train_y,stratify=train_y,test_size=0.1)
 
 import lightgbm as lgb
-@@ -99,7 +96,7 @@ def preprocess_data(df):
+dtrain = lgb.Dataset(train_X_all, train_y)
+dvalid = lgb.Dataset(val_X_all, val_y)
+dtest = lgb.Dataset(test_X_all,test_y)
+
+param = {'num_leaves': 64, 'objective': 'binary',"seed":1,'boosting_type': 'dart',  # Use boosting_type="gbrt" for large dataset
+    'objective': 'binary',
     'metric': 'auc',
     'learning_rate': 0.1,
     'num_leaves': 11,
     'max_depth': -1, 
-    'max_depth': -1,
     'min_child_samples': 100,
     'max_bin': 100,
     'subsample': 0.9,  # Was 0.7
-@@ -118,28 +115,46 @@ def preprocess_data(df):
+    'subsample_freq': 1,
+    'colsample_bytree': 0.7,
+    'min_child_weight': 0,
+         'min_split_gain': 0,
+    'reg_alpha': 0,
+    'reg_lambda': 0,}
+num_round = 1000
+bst = lgb.train(param, dtrain, num_round, valid_sets=[dvalid], early_stopping_rounds=20)
+
+from sklearn import metrics
+ypred = bst.predict(test_X_all)
 score = metrics.roc_auc_score(test_y, ypred)
 print(f"Test score: {score}")
 
 """### Encoding the categorical features:
 
 #### Let's Apply Target Encoding
-"""
 
-
-
-
-
-
-
-
-
-
-
-###########################################################################
-###########################################################################
-"""### Encoding the categorical features:
-   #### Let's Apply Target Encoding
-"""
 train_X.columns
 
 cat_features=['ip', 'app', 'device', 'os', 'channel']
@@ -251,34 +249,31 @@ train_X_all,test_X_all,val_X_all=category_encoding(target_enc)
 import lightgbm as lgb
 dtrain = lgb.Dataset(train_X_all, train_y)
 dvalid = lgb.Dataset(val_X_all, val_y)
-@@ -150,7 +165,7 @@ def category_encoding(encoder):
+dtest = lgb.Dataset(test_X_all,test_y)
+
+param = {'num_leaves': 64, 'objective': 'binary',"seed":1,'boosting_type': 'dart',  # Use boosting_type="gbrt" for large dataset
+    'objective': 'binary',
     'metric': 'auc',
     'learning_rate': 0.1,
     'num_leaves': 11,
     'max_depth': -1, 
-    'max_depth': -1,
     'min_child_samples': 100,
     'max_bin': 100,
     'subsample': 0.9,  # Was 0.7
-@@ -188,7 +203,7 @@ def category_encoding(encoder):
-    'metric': 'auc',
-    'learning_rate': 0.1,
-    'num_leaves': 11,
-    'max_depth': -1, 
-    'max_depth': -1,
-    'min_child_samples': 100,
-    'max_bin': 100,
-    'subsample': 0.9,  # Was 0.7
-@@ -206,12 +221,17 @@ def category_encoding(encoder):
+    'subsample_freq': 1,
+    'colsample_bytree': 0.7,
+    'min_child_weight': 0,
+         'min_split_gain': 0,
+    'reg_alpha': 0,
+    'reg_lambda': 0,}
+num_round = 1000
+bst = lgb.train(param, dtrain, num_round, valid_sets=[dvalid], early_stopping_rounds=20)
+
+from sklearn import metrics
+ypred = bst.predict(test_X_all)
 score = metrics.roc_auc_score(test_y, ypred)
 print(f"Test score: {score}")
 
-
-
-
-
-
-###########################################################################
 ###########################################################################
 """### Let's Apply catboost Encoding"""
 
@@ -289,19 +284,32 @@ cat_enc = ce.CatBoostEncoder(cols = cat_features,random_state=100)
 train_X_all,test_X_all,val_X_all=category_encoding(cat_enc)
 
 import lightgbm as lgb
-@@ -225,7 +245,7 @@ def category_encoding(encoder):
+dtrain = lgb.Dataset(train_X_all, train_y)
+dvalid = lgb.Dataset(val_X_all, val_y)
+dtest = lgb.Dataset(test_X_all,test_y)
+
+param = {'num_leaves': 64, 'objective': 'binary',"seed":1,'boosting_type': 'dart',  # Use boosting_type="gbrt" for large dataset
+    'objective': 'binary',
     'metric': 'auc',
     'learning_rate': 0.1,
     'num_leaves': 11,
     'max_depth': -1, 
-    'max_depth': -1,
     'min_child_samples': 100,
     'max_bin': 100,
     'subsample': 0.9,  # Was 0.7
-@@ -243,26 +263,33 @@ def category_encoding(encoder):
+    'subsample_freq': 1,
+    'colsample_bytree': 0.7,
+    'min_child_weight': 0,
+         'min_split_gain': 0,
+    'reg_alpha': 0,
+    'reg_lambda': 0,}
+num_round = 1000
+bst = lgb.train(param, dtrain, num_round, valid_sets=[dvalid], early_stopping_rounds=20)
+
+from sklearn import metrics
+ypred = bst.predict(test_X_all)
 score = metrics.roc_auc_score(test_y, ypred)
 print(f"Test score: {score}")
-
 !pip install gplearn
 
 
@@ -356,16 +364,31 @@ train_X_all,test_X_all,val_X_all = pd_col_genetic_transform(df2, col= list(df2.c
 
 
 
-@@ -287,7 +321,7 @@ def genetic_transform():
+import lightgbm as lgb
+dtrain = lgb.Dataset(train_X_all, train_y)
+dvalid = lgb.Dataset(val_X_all, val_y)
+dtest = lgb.Dataset(test_X_all,test_y)
+
+param = {'num_leaves': 64, 'objective': 'binary',"seed":1,'boosting_type': 'dart',  # Use boosting_type="gbrt" for large dataset
+    'objective': 'binary',
     'metric': 'auc',
     'learning_rate': 0.1,
     'num_leaves': 11,
     'max_depth': -1, 
-    'max_depth': -1,
     'min_child_samples': 100,
     'max_bin': 100,
     'subsample': 0.9,  # Was 0.7
-@@ -306,5 +340,5 @@ def genetic_transform():
+    'subsample_freq': 1,
+    'colsample_bytree': 0.7,
+    'min_child_weight': 0,
+         'min_split_gain': 0,
+    'reg_alpha': 0,
+    'reg_lambda': 0,}
+num_round = 1000
+bst = lgb.train(param, dtrain, num_round, valid_sets=[dvalid], early_stopping_rounds=20)
+
+from sklearn import metrics
+ypred = bst.predict(test_X_all)
 score = metrics.roc_auc_score(test_y, ypred)
 print(f"Test score: {score}")
 
