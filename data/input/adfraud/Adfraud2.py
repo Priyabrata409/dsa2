@@ -315,12 +315,10 @@ print(f"Test score: {score}")
 
 
 ###########################################################################
-###########################################################################
-# !pip install gplearn
+
 
 from gplearn.genetic import SymbolicTransformer
 
-def genetic_transform():
 def pd_col_genetic_transform(df=None, col=None, pars=None):
     num_gen=20
     num_comp=10
@@ -340,20 +338,20 @@ def pd_col_genetic_transform(df=None, col=None, pars=None):
                             max_samples=0.9, verbose=1,
                             random_state=0, n_jobs=6)
 
-    gen_feats = gp.fit_transform(train_X, train_y)
+     gen_feats = gp.fit_transform(train_X, train_y)
     gen_feats = pd.DataFrame(gen_feats, columns=["gen_"+str(a) for a in range(gen_feats.shape[1])])
     gen_feats.index = train_X.index
     train_X_all=pd.concat((train_X,gen_feats),axis=1)
-
     gen_feats = gp.transform(test_X)
     gen_feats = pd.DataFrame(gen_feats, columns=["gen_"+str(a) for a in range(gen_feats.shape[1])])
     gen_feats.index = test_X.index
-@@ -273,7 +300,14 @@ def genetic_transform():
+    test_X_all=pd.concat((test_X,gen_feats),axis=1)
+
+    gen_feats = gp.transform(val_X)
+    gen_feats = pd.DataFrame(gen_feats, columns=["gen_"+str(a) for a in range(gen_feats.shape[1])])
     gen_feats.index = val_X.index
     val_X_all=pd.concat((val_X,gen_feats),axis=1)
     return train_X_all,test_X_all,val_X_all
-train_X_all,test_X_all,val_X_all=genetic_transform()
-
 
 df2 = pd_colall_preprocess(df, list(df.columns),
                            pars = {})
