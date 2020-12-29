@@ -29,6 +29,7 @@ def preprocess_data(df):
 
        ## Let's see on which day the click was happend
        df["day"]=df["click_time"].dt.day.astype("uint8")
+       df["day_of_week"]=df["click_time"].dt.dayofweek.astype("uint8")
        return df
 
 def pd_colall_preprocess(df, col=None, pars=None):
@@ -47,13 +48,6 @@ def pd_colall_preprocess(df, col=None, pars=None):
    print( "Let's see new clicks count features")
    df["n_ip_clicks"]=df[['ip', 'channel']].groupby(by=["ip"])[["channel"]].transform("count").astype("uint8")
    ## Let's see on which hour the click was happend
-   df["click_time"]=pd.to_datetime(df["click_time"])
-
-   df["hour"]  = df["click_time"].dt.hour.astype("uint8")
-   df["minute"]  = df["click_time"].dt.minute.astype("uint8")
-   df["second"] = df["click_time"].dt.second.astype("uint8")
-   df["day"]= df["click_time"].dt.day.astype("uint8")
-   df["day_of_week"]=df["click_time"].dt.dayofweek.astype("uint8")
    print('Computing the number of clicks associated with a given app per hour...')
    df["n_app_clicks"]= df[['app', 'day', 'hour', 'channel']].groupby(by=['app', 'day', 'hour'])[['channel']].transform("count").astype("uint8")
 
